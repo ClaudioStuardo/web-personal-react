@@ -3,6 +3,8 @@ import { Form, Input, Button, Checkbox, notification } from 'antd';
 import { UserOutlined, LockFilled } from '@ant-design/icons';
 import { emailValidation, minLengthValidation } from '../../../utils/formValidation';
 
+import { signUpApi } from '../../../api/user';
+
 import './RegisterForm.scss';
 
 export default function RegisterForm() {
@@ -60,13 +62,37 @@ export default function RegisterForm() {
         }
     };
     
-    const register = e => {
-        e.preventDefault();
-        console.log(formValid);
-    }
+    const register = async e => {
+        // const { email, password, repeatPassword, privacyPolicy } = formValid;
+        const emailVal = inputs.email;
+        const passwordVal = inputs.password;
+        const repeatPasswordVal = inputs.repeatPassword;
+        const privacyPolicyVal = inputs.privacyPolicy;
+
+        console.log(inputs.email);
+        console.log(inputs.password);
+        console.log(inputs.repeatPassword);
+        console.log(inputs.privacyPolicy);
+
+        if ( !emailVal || !passwordVal || !repeatPasswordVal || !privacyPolicyVal ) {
+            notification['error']({
+                message: "Todos los campos son obligatorios"
+            });
+        } else {
+            if (passwordVal !== repeatPasswordVal) {
+                notification['error']({
+                    message: "Las contraseñas deben ser iguales"
+                });
+            } else {
+                // TO DO: Conectar con el API y registrar al usuario.
+                const result = await signUpApi(inputs);
+                console.log(result);
+            }
+        }
+    };
 
     return (
-        <Form className="regiter-form" onSubmit={register} onChange={changeForm}>
+        <Form className="regiter-form" onFinish={register} onChange={changeForm}>
             <Form.Item>
                 <Input 
                     prefix={<UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
