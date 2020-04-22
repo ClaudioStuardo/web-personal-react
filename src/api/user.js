@@ -5,7 +5,7 @@ export function signUpApi(data) {
 
     const params = {
         method: "POST",
-        body: data,
+        body: JSON.stringify(data),
         header: {
             "Content-Type": "application/json"
         }
