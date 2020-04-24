@@ -69,11 +69,6 @@ export default function RegisterForm() {
         const repeatPasswordVal = inputs.repeatPassword;
         const privacyPolicyVal = inputs.privacyPolicy;
 
-        console.log(inputs.email);
-        console.log(inputs.password);
-        console.log(inputs.repeatPassword);
-        console.log(inputs.privacyPolicy);
-
         if ( !emailVal || !passwordVal || !repeatPasswordVal || !privacyPolicyVal ) {
             notification['error']({
                 message: "Todos los campos son obligatorios"
@@ -84,12 +79,42 @@ export default function RegisterForm() {
                     message: "Las contraseñas deben ser iguales"
                 });
             } else {
-                // TO DO: Conectar con el API y registrar al usuario.
                 const result = await signUpApi(inputs);
-                console.log(result);
+
+                if (!result.ok) {
+                    notification["error"]({
+                        message: result.message
+                    });
+                } else {
+                    notification["success"]({
+                        message: result.message
+                    });
+                    resetForm();
+                }
             }
         }
     };
+
+    const resetForm = () => {
+        const inputs = document.getElementsByTagName('input');
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].classList.remove("success");
+            inputs[i].classList.remove("error");
+        }
+
+        setInputs({
+            email: "",
+            password: "",
+            repeatPassword: "",
+            privacyPolicy: false
+        });
+        setFormValid({
+            email: false,
+            password: false,
+            repeatPassword: false,
+            privacyPolicy: false
+        })
+    }
 
     return (
         <Form className="regiter-form" onFinish={register} onChange={changeForm}>
