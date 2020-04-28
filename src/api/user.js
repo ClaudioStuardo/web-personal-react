@@ -204,3 +204,24 @@ export function deleteUserApi(token, userId) {
         return err.message;
     })
 }
+
+export function signUpAdminApi(token, data) {
+    const url = `${basePath}/${apiVersion}/sign-up-admin`;
+
+    const params = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: token
+        },
+        body: JSON.stringify(data)
+    };
+
+    return fetch(url, params).then(resp => {
+        return resp.json();
+    }).then(result => {
+        return result.message;
+    }).catch(err => {
+        return err.message;
+    });
+}
